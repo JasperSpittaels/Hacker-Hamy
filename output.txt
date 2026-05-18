@@ -1,0 +1,9 @@
+ERROR: Invalid Schedule Type specified.
+Type "SCHTASKS /CREATE /?" for usage.
+ERROR: Het systeem kan het opgegeven bestand niet vinden.
+ERROR: Het systeem kan het opgegeven bestand niet vinden.
+ERROR: Invalid Schedule Type specified.
+Type "SCHTASKS /CREATE /?" for usage.
+ERROR: Het systeem kan het opgegeven bestand niet vinden.
+ERROR: Het systeem kan het opgegeven bestand niet vinden.
+Press any key to continue . . .
